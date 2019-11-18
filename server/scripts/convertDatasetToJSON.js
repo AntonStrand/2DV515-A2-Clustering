@@ -20,8 +20,8 @@ const main = saveTo => R.pipe(
   map(R.split('\n')),
   map(R.map(R.split('\t'))),
   map(R.filter(row => R.head(row) !== '')),
-  map(rows => R.tail(rows).map(R.zipObj(R.head(rows)))),
-  map(R.map(row => ({ title: row.Blog, wordCount: R.tail(Object.values(row)).map(Number)}))),
+  map(rows => ({ words: R.tail(R.head(rows)), blogs: R.tail(rows).map(R.zipObj(R.head(rows)))})),
+  map(data => ({ ...data, blogs: data.blogs.map(row => ({ title: row.Blog, wordCount: R.tail(Object.values(row)).map(Number)}))})),
   map(JSON.stringify),
   chain(writeFile(saveTo)),
   fork(e => console.log('The conversion failed.\n', e))
