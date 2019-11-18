@@ -24,8 +24,8 @@ const main = saveTo => R.pipe(
   map(data => ({ ...data, blogs: data.blogs.map(row => ({ title: row.Blog, wordCount: R.tail(Object.values(row)).map(Number)}))})),
   map(JSON.stringify),
   chain(writeFile(saveTo)),
-  fork(e => console.log('The conversion failed.\n', e))
-      (() => console.log('The data has been converted to a JSON file'))
+  fork(e => console.log('The conversion failed.\n', e, '\n'))
+      (() => console.log('The data has been converted to a JSON file\n'))
 )
 
 main(process.argv[3])(process.argv[2])
