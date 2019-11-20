@@ -13,13 +13,14 @@ const writeFile = file => data => node (done => fs.writeFile (file, data, done))
 /** fromNullable :: a -> Fluture a a */
 const fromNullable = ifElse(R.isNil, reject, resolve)
 
+/** notEmptyRow :: String -> Boolean */
 const notEmptyRow = row => row !== ''
 
 /** toRow :: String -> [String] */
 const toRow = R.split('\n')
 
 /** toColumn :: [String] -> [[String]] */
-const toColumn = R.map (R.split ('\t'))
+const toColumns = R.map (R.split ('\t'))
 
 /** toWords :: [[String]] -> [String] */
 const toWords = R.compose (R.tail, R.head)
@@ -29,21 +30,27 @@ const toBlog = row => ({
   wordCount: R.map (Number) (R.tail (row))
 })
 
-const toFormat = rows => ({
+/** format :: [[String]] -> { wordCount: Number, words: [String], blogs: { title: String, wordCount: Number }} */
+const format = rows => ({
   wordCount: toWords (rows).length,
   words: toWords (rows),
   blogs: R.map (toBlog) (R.tail (rows))
 })
 
+/** transformToJSON :: String -> String */
+const transformToJSON = R.pipe(
+  toRow,
+  R.filter (notEmptyRow),
+  toColumns,
+  format,
+  JSON.stringify
+)
+
 /** main :: String -> () */
 const main = saveTo => R.pipe(
   fromNullable,
   chain (readFile),
-  map (toRow),
-  map (R.filter (notEmptyRow)),
-  map (toColumn),
-  map (toFormat),
-  map (JSON.stringify),
+  map (transformToJSON),
   chain (writeFile (saveTo)),
   fork (e => console.log('\nThe conversion failed.\n', e, '\n'))
        (() => console.log('\nThe data has been converted to a JSON file\n'))
