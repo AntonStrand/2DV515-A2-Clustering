@@ -28,6 +28,7 @@
   "homepage": "https://github.com/AntonStrand/2DV515-A2-Clustering#readme",
   "dependencies": {
     "fluture": "^12.0.0",
+    "paperplane": "^3.1.1",
     "ramda": "^0.26.1"
   },
   "devDependencies": {
