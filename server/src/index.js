@@ -1,12 +1,12 @@
 const http = require('http')
 const { mount, logger, routes, methods, json } = require('paperplane')
 const { composeP, map } = require('ramda')
-const F = require('fluture')
-const port = 3001
+const { getWordCount } = require('./repositories')
+const { port } = require('../config')
 
 const endpoints = routes({
   '/': methods({
-    GET: () => F.resolve({ message: 'Hello from API' })
+    GET: () => map (count => ({ count })) (getWordCount)
   })
 })
 
