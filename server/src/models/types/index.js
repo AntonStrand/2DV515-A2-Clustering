@@ -1,5 +1,5 @@
-const Type = require('union-type')
-const { isList: { List } } = require('list')
+const Type = require ('union-type')
+const { isList: { List } } = require ('list')
 
 const Blog = Type ({
   of: {
@@ -9,7 +9,7 @@ const Blog = Type ({
 })
 
 const Centroid = ({
-  of:{
+  of: {
     wordCount: List,
     assignments: List
   }

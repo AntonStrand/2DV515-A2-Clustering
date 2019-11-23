@@ -1,23 +1,23 @@
 'use strict'
 
-const { dataset } = require ('../../config')
-const { readFile } = require('../utils')
 const { Blog } = require ('../models/types')
+const { prop, pipe } = require ('../utils/sanctuary')
+const { map } = require ('fluture')
 const List = require ('list')
-const { compose, map, prop } = require ('ramda')
-const { encase, chain } = require ('fluture')
-
-/** data :: Future Error a */
-const data = chain (encase (JSON.parse)) (readFile (dataset))
+const Storage = require ('./Storage')
 
 /** toBlog :: ({ blogs :: [a] }) -> (List Blog) */
-const toBlog = compose (map (Blog.of), List.from, prop ('blogs'))
+const toBlog = pipe ([
+  prop ('blogs'),
+  List.from,
+  map (Blog.of)
+])
 
 /** getBlogs :: Future Error (List Blog) */
-const getBlogs = map (toBlog) (data)
+const getBlogs = map (toBlog) (Storage.data ())
 
 /** getWordCount :: Future Error Number */
-const getWordCount = map (prop ('wordCount')) (data)
+const getWordCount = map (prop ('wordCount')) (Storage.data ())
 
 module.exports = {
   getBlogs,

@@ -1,8 +1,9 @@
-const { foldl } = require('list')
+const { foldl } = require ('list')
 
 /** getWordRange :: (List Blog) -> Number -> { min: Number, max: Number }  */
-const getWordRange = blogs => i => 
-  foldl((r, blog) => ({
+const getWordRange = blogs => i =>
+  foldl (
+    (r, blog) => ({
       min: Math.min (r.min, blog.wordCount[i]),
       max: Math.max (r.max, blog.wordCount[i])
     }),
@@ -12,7 +13,7 @@ const getWordRange = blogs => i =>
 
 /** kMean :: Number -> Number -> (List Blog) -> (List Cluster) */
 const kMean = k => maxIterations => blogs => {
-  throw new Error('K-mean is not implemented')
+  throw new Error ('K-mean is not implemented', k, maxIterations, getWordRange (blogs (9)))
 }
 
 module.exports = kMean
