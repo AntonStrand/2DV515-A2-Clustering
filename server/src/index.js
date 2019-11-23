@@ -6,16 +6,16 @@ const { port } = require('../config')
 
 const endpoints = routes({
   '/': methods({
-    GET: () => map (count => ({ count })) (getWordCount)
+    GET: () => map(count => ({ count }))(getWordCount)
   })
 })
 
-const app = composeP (map (json), endpoints)
+const app = composeP(
+  map(json),
+  endpoints
+)
 
-const middleware = [
-  require('./middlewares/fromFuture')
-]
-
+const middleware = [require('./middleware/fromFuture')]
 
 http
   .createServer(mount({ app, logger, middleware }))
