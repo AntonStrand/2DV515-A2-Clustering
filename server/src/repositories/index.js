@@ -1,20 +1,18 @@
 'use strict'
 
-const { map, prop, pipe } = require ('../utils/sanctuary')
+const { map, prop } = require ('../utils/sanctuary')
 const List = require ('list')
 const Storage = require ('./Storage')
+const { pipe } = require ('ramda')
 
 /** toBlogs :: { blogs :: [Blog] } -> (List Blog) */
-const toBlogs = pipe ([
-  prop ('blogs'),
-  List.from
-])
+const toBlogs = pipe (prop ('blogs'), List.from)
 
 /** getBlogs :: Future Error (List Blog) */
-const getBlogs = () => map (toBlogs) (Storage.data ())
+const getBlogs = pipe (Storage.data, map (toBlogs))
 
 /** getWordCount :: Future Error Number */
-const getWordCount = () => map (prop ('wordCount')) (Storage.data ())
+const getWordCount = pipe (Storage.data, map (prop ('wordCount')))
 
 module.exports = {
   getBlogs,
