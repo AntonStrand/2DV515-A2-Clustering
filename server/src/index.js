@@ -1,12 +1,15 @@
 const http = require ('http')
 const { mount, logger, routes, methods, json } = require ('paperplane')
 const { composeP, map } = require ('ramda')
-const { getWordCount } = require ('./repositories')
+const { getWordCount, getBlogs } = require ('./repositories')
 const { port } = require ('../config')
 
 const endpoints = routes ({
   '/': methods ({
-    GET: () => map (count => ({ count })) (getWordCount)
+    GET: () => map (count => ({ count })) (getWordCount ())
+  }),
+  '/blogs': methods ({
+    GET: getBlogs
   })
 })
 

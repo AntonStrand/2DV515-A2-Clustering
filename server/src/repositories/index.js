@@ -1,23 +1,20 @@
 'use strict'
 
-const { Blog } = require ('../models/types')
-const { prop, pipe } = require ('../utils/sanctuary')
-const { map } = require ('fluture')
+const { map, prop, pipe } = require ('../utils/sanctuary')
 const List = require ('list')
 const Storage = require ('./Storage')
 
-/** toBlog :: ({ blogs :: [a] }) -> (List Blog) */
-const toBlog = pipe ([
+/** toBlogs :: { blogs :: [Blog] } -> (List Blog) */
+const toBlogs = pipe ([
   prop ('blogs'),
-  List.from,
-  map (Blog.of)
+  List.from
 ])
 
 /** getBlogs :: Future Error (List Blog) */
-const getBlogs = map (toBlog) (Storage.data ())
+const getBlogs = () => map (toBlogs) (Storage.data ())
 
 /** getWordCount :: Future Error Number */
-const getWordCount = map (prop ('wordCount')) (Storage.data ())
+const getWordCount = () => map (prop ('wordCount')) (Storage.data ())
 
 module.exports = {
   getBlogs,

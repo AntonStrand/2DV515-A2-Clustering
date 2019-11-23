@@ -3,28 +3,20 @@
  */
 
 const { dataset } = require ('../../config')
-const { readFile, maybeToFuture } = require ('../utils')
-const { chain, map, encase } = require ('fluture')
-const { pipe, Nothing, Just, isJust } = require ('../utils/sanctuary')
+const { readFile, parseJson } = require ('../utils')
+const { chain, map, resolve } = require ('fluture')
 
 // Store the content of the file in memory
-let cache = Nothing
+let cache = null
 
 /** saveToCache :: a -> a */
-const saveToCache = data => {
-  cache = Just (data)
-  return data
-}
+const saveToCache = data => cache = data || data
 
 /** getData :: () -> Future Error a */
 const data = () =>
-  isJust (cache)
-    ? maybeToFuture (cache)
-    : pipe ([
-      readFile,
-      chain (encase (JSON.parse)),
-      map (saveToCache)
-    ]) (dataset)
+  cache !== null
+    ? resolve (cache)
+    : map (saveToCache) (chain (parseJson) (readFile (dataset)))
 
 module.exports = {
   data
