@@ -1,0 +1,28 @@
+{
+  "name": "2dv515-a2-clustering",
+  "version": "1.0.0",
+  "description": "My solution for assignment 2 in Web Intelligence (2DV515) at Linnaeus University",
+  "main": "index.js",
+  "scripts": {
+    "install": "cd client && npm install && cd ../server && npm install && cd .."
+  },
+  "keywords": [
+    "Cluster",
+    "Web",
+    "intelligence",
+    "REST",
+    "API",
+    "Assignment",
+    "2DV515"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntonStrand/2DV515-A2-Clustering.git"
+  },
+  "author": "Anton Strand",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AntonStrand/2DV515-A2-Clustering/issues"
+  },
+  "homepage": "https://github.com/AntonStrand/2DV515-A2-Clustering#readme"
+}
