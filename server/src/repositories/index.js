@@ -1,9 +1,8 @@
 'use strict'
 
-const { map, prop } = require ('../utils/sanctuary')
 const List = require ('list')
 const Storage = require ('./Storage')
-const { pipe } = require ('ramda')
+const { pipe, map, prop } = require ('ramda')
 
 /** toBlogs :: { blogs :: [Blog] } -> (List Blog) */
 const toBlogs = pipe (prop ('blogs'), List.from)

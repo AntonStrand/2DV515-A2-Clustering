@@ -4,7 +4,7 @@ const { composeP, map } = require ('ramda')
 const { getWordCount, getBlogs } = require ('./repositories')
 const { port } = require ('../config')
 const kMean = require ('./models/algorithms/k-mean')
-const { lift2 } = require ('./utils/sanctuary')
+const { liftA2 } = require ('./utils')
 
 const endpoints = routes ({
   '/': methods ({
@@ -14,7 +14,7 @@ const endpoints = routes ({
     GET: getBlogs
   }),
   '/k-mean': methods ({
-    GET: () => lift2 (kMean (5) (100)) (getWordCount ()) (getBlogs ())
+    GET: () => liftA2 (kMean (5) (100)) (getWordCount ()) (getBlogs ())
   })
 })
 
