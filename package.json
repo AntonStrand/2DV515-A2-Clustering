@@ -4,7 +4,10 @@
   "description": "My solution for assignment 2 in Web Intelligence (2DV515) at Linnaeus University",
   "main": "index.js",
   "scripts": {
-    "install": "cd client && npm install && cd ../server && npm install && cd .."
+    "install": "cd client && npm install && cd ../server && npm install && cd ..",
+    "start": "npm-run-all -p start:* -- --watch",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start"
   },
   "keywords": [
     "Cluster",
@@ -24,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/AntonStrand/2DV515-A2-Clustering/issues"
   },
-  "homepage": "https://github.com/AntonStrand/2DV515-A2-Clustering#readme"
+  "homepage": "https://github.com/AntonStrand/2DV515-A2-Clustering#readme",
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }
