@@ -34,8 +34,7 @@
     "paperplane": "^3.1.1",
     "ramda": "^0.26.1",
     "sanctuary": "^2.0.1",
-    "sanctuary-def": "^0.20.1",
-    "union-type": "^0.4.1"
+    "sanctuary-def": "^0.20.1"
   },
   "devDependencies": {
     "eslint": "^6.7.0",
