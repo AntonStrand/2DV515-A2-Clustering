@@ -26,9 +26,13 @@ My solution for assignment 2 in Web Intelligence (2DV515) at Linnaeus University
 - [ ] Run the algorithm on the blog data dataset
 - [ ] Present the result as an interactive tree in the client GUI (it shall be possible to expand/collapse branches)
 
-## Get started
+## Scripts
 
-`npm install` - Installs all dependencies and generates a new `data.json` <br />
-`npm start` - Starts everything <br />
-`npm run start:client` - Start only client <br />
-`npm run start:server` - Start only server <br />
+#### `npm install`
+Installs all dependencies and generates a new `data.json`.
+#### `npm start`
+Starts everything.
+#### `npm run start:client`
+Start only client.
+#### `npm run start:server`
+Start only server.
