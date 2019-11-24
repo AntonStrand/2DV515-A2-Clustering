@@ -29,4 +29,6 @@ My solution for assignment 2 in Web Intelligence (2DV515) at Linnaeus University
 ## Get started
 
 `npm install` - Installs all dependencies and generates a new `data.json` <br />
-`npm start` - Starts everything
+`npm start` - Starts everything <br />
+`npm run start:client` - Start only client <br />
+`npm run start:server` - Start only server <br />
