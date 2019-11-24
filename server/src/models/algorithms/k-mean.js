@@ -1,8 +1,11 @@
 const { reduce, forEach } = require ('list/curried')
 const { random } = require ('../../utils')
 const pearson = require ('../metrics/pearson')
-const { repeat, range, map, pipe } = require ('ramda')
-const Centroid = require ('../centroid')
+const { range, map, pipe, flip, forEach: forE, all: every } = require ('ramda')
+const { Centroid, clearAssignments, assign, isUnchanged } = require ('../types/Centroid')
+
+const all = flip (every)
+const forAll = flip (forE)
 
 /** getWordRange :: (List Blog) -> Number -> WordRange  */
 const getWordRange = blogs => i =>
@@ -22,65 +25,61 @@ const getWordRanges = (blogs) => pipe (
 )
 
 /** initCentroids :: [WordRange] -> Number -> [Centroid] */
-const initCentroids = k => ranges => 
-  ranges.reduce ((cs, { min, max }, i) => 
-    cs.map (c => Centroid.setWordCount (i) (random (min) (max)) (c))
-  , repeat (Centroid.empty ()) (k))
+const initCentroids = k => ranges => {
+  const centroids = []
+
+  for (let i=0; i<k; i++) {
+    centroids[i] = new Centroid ()
+    ranges.forEach (({ min, max }, idx) =>
+      centroids[i].setWordCount (idx, random (min) (max)))
+  }
+
+  return centroids
+}
 
 /** assignToCentroid :: [Blog] -> [Centroid] -> [Centroid] */
 const assignToCentroid = wordCount => blogs => centroids => {
   const calcDistance = pearson (wordCount)
-  const cs = centroids.slice (0)
-  let index = 0
   
   forEach (blog => {
     let distance = Infinity
     let closest
     //Find closest centroid
-    cs.forEach ((c, i) => {
+    forAll (centroids) (c => {
       const cDist = calcDistance (blog) (c)
       if (cDist < distance) {
         closest = c
         distance = cDist
-        index = i
       }
     })
     //Assign blog to centroid
-    cs[index] = Centroid.assign (closest) (blog)
+    assign (closest) (blog)
   }) (blogs)
-
-  return cs
 }
 
 const average = wordIdx => ({ assignments }) => 
   (assignments.reduce ((sum, blog) => sum + blog.wordCount[wordIdx], 0) / assignments.length)
 
-const updatePosition = wordIdx => centroid => 
-  Centroid.setWordCount (wordIdx) (average (wordIdx) (centroid)) (centroid)
-
 const updatePositions = wordCount => centroids => {
-  const cs = centroids.slice (0)
   for (let i=0; i < wordCount; i++) {
-    cs.forEach ((c, idx) => cs[idx] = updatePosition (i) (c))
+    forAll (centroids) (c =>
+      c.setWordCount (i, average (i) (c)))
   }
-  return cs
 }
 
-/** kMean :: wordCount -> Number -> Number -> (List Blog) -> (List Cluster) */
+/** kMean :: Number -> Number -> Number -> (List Blog) -> [Cluster] */
 const kMean = k => maxIterations => wordCount => blogs => {
   // Generate K random centroids
-  let centroids = initCentroids (k) (getWordRanges (blogs) (wordCount))
-  
-  let i = 0
+  const centroids = initCentroids (k) (getWordRanges (blogs) (wordCount))
 
-  while (i < maxIterations) {
-    centroids = centroids.map (Centroid.clearAssignments)
-    centroids = assignToCentroid (wordCount) (blogs) (centroids)
-    centroids = updatePositions (wordCount) (centroids)
-    i++
+  for (let i=0; i < maxIterations; i++) {
+    forAll (centroids) (clearAssignments)
+    assignToCentroid (wordCount) (blogs) (centroids)
+    updatePositions (wordCount) (centroids)
+    if (all (centroids) (isUnchanged)) break
   }
 
-  return centroids.map ((c, i) => ({ index: i, assignments: c.assignments.map (a => ({ title: a.title })) }))
+  return centroids
 }
 
 module.exports = kMean
