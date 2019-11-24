@@ -3,6 +3,8 @@ const { mount, logger, routes, methods, json } = require ('paperplane')
 const { composeP, map } = require ('ramda')
 const { getWordCount, getBlogs } = require ('./repositories')
 const { port } = require ('../config')
+const kMean = require ('./models/algorithms/k-mean')
+const { lift2 } = require ('./utils/sanctuary')
 
 const endpoints = routes ({
   '/': methods ({
@@ -10,6 +12,9 @@ const endpoints = routes ({
   }),
   '/blogs': methods ({
     GET: getBlogs
+  }),
+  '/k-mean': methods ({
+    GET: () => lift2 (kMean (2) (0)) (getWordCount ()) (getBlogs ())
   })
 })
 
