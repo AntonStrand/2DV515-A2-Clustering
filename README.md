@@ -29,10 +29,10 @@ My solution for assignment 2 in Web Intelligence (2DV515) at Linnaeus University
 ## Scripts
 
 #### `npm install`
-Installs all dependencies and generates a new `data.json`.
+Installs all dependencies for both client and server and generates a new `data.json`.
 #### `npm start`
-Starts everything.
+Starts both client ([localhost:3000](http://localhost:3000)) and server ([localhost:3001](http://localhost:3001)).
 #### `npm run start:client`
-Start only client.
+Start only client on [localhost:3000](http://localhost:3000).
 #### `npm run start:server`
-Start only server.
+Start only server on [localhost:3001](http://localhost:3001).
