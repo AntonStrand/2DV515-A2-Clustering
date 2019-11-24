@@ -35,7 +35,7 @@ module.exports = {
         ],
         "no-var": ["error"],
         "object-curly-spacing": ["error", "always"],
-        "prefer-const": ["error"],
+        "prefer-const": ["warn"],
         "prefer-template": ["error"],
         "comma-dangle": ["error", "never"],
         "function-paren-newline": ["error", "consistent"],

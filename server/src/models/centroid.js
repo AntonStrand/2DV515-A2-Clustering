@@ -2,7 +2,7 @@
  * Centroid :: { wordCount :: {"Number", Number}, assignments :: [Blog] }
  */
 
-const { lensPath, lensProp, set } = require ('ramda')
+const { append, lensPath, lensProp, set, over } = require ('ramda')
 
 const assignments = lensProp ('assignments')
 
@@ -14,10 +14,15 @@ const setWordCount = wordId => position =>
   set (lensPath ([ 'wordCount', `${wordId}` ])) (position)
 
 /** clearAssignments :: Centroid -> Centroid */
-const clearAssignments = set (assignments) ([]) 
+const clearAssignments = set (assignments) ([])
+
+/** assign :: Blog -> Centroid -> Centroid */
+const assign = centroid => blog =>
+  over (assignments) (append (blog)) (centroid)
 
 module.exports = {
   setWordCount,
   clearAssignments,
-  empty
+  empty,
+  assign
 }

@@ -14,7 +14,7 @@ const endpoints = routes ({
     GET: getBlogs
   }),
   '/k-mean': methods ({
-    GET: () => lift2 (kMean (2) (0)) (getWordCount ()) (getBlogs ())
+    GET: () => lift2 (kMean (4) (100)) (getWordCount ()) (getBlogs ())
   })
 })
 
