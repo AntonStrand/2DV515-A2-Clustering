@@ -27,7 +27,7 @@ module.exports = {
         "no-unused-vars": ["error", { "after-used": null }],
         "no-undef": ["error"],
         eqeqeq: ["error", "always", { null: "ignore" }],
-        "arrow-body-style": ["warn", "never"],
+        "arrow-body-style": ["warn", "as-needed"],
         "arrow-spacing": "error",
         "prefer-arrow-callback": [
           "error",
