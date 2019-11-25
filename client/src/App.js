@@ -5,24 +5,45 @@ import ClusterAccordion from './components/ClusterAccordion'
 import { getClusters } from './api'
 import { fork } from 'fluture'
 import Type from 'union-type'
+import { Dimmer, Loader } from 'semantic-ui-react'
+import { pipe } from 'ramda'
 
-const ClusterState = Type ({
+const State = Type ({
   Kmean: [Array],
+  Loading: [],
   Nothing: []
 })
 
 function App () {
-  const [state, setState] = useState (ClusterState.Nothing)
-  const requestClusters = formData =>
-    fork (console.error) (x => setState (ClusterState.Kmean (x))) (getClusters (formData))
+  const [state, setState] = useState (State.Nothing)
 
-  console.log (state)
+  /** startLoading :: a -> a */
+  const startLoading = x => setState (State.Loading) || x
+
+  /** setKmeanState :: a -> State () */
+  const setKmeanState = pipe (
+    State.Kmean,
+    setState
+  )
+
+  /** requestClusters :: FormData -> State () */
+  const requestClusters = pipe (
+    startLoading,
+    getClusters,
+    fork (console.error) (setKmeanState)
+  )
+
   return (
-    <div className='App'>
+    <div className='wrapper'>
       <Form onSubmit={requestClusters} />
       {
         state.case ({
           Kmean: cs => <ClusterAccordion clusters={cs} />,
+          Loading: () => (
+            <Dimmer active inverted>
+              <Loader inverted>Loading</Loader>
+            </Dimmer>
+          ),
           _: () => ''
         })
       }

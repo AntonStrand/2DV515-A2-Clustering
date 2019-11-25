@@ -67,7 +67,7 @@ const SettingsForm = ({ onSubmit }) => {
         />
       </Form.Group>
       <Button
-        type='submit'
+        type='button'
         disabled={!isValidState (state)}
         onClick={() => {
           if (isValidState (state)) onSubmit (forkState (state))
