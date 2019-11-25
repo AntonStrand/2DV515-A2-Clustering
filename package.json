@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-    "start": "npm-run-all -p start:* -- --watch",
+    "start": "npm-run-all -p start:* -- --watch || 0",
     "start:client": "cd client && npm start",
     "start:server": "cd server && npm start"
   },
