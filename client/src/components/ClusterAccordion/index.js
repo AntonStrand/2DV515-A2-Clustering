@@ -7,7 +7,7 @@ const ClusterAccordion = ({ clusters }) => {
   const [activeIdx, setActive] = useState (0)
 
   return (
-    <Accordion styled>
+    <Accordion styled fluid>
       {clusters.map (AccordionItem (activeIdx, setActive))}
     </Accordion>
   )
