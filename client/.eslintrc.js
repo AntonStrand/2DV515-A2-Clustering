@@ -17,7 +17,8 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    "func-call-spacing": ["error", "always", { allowNewlines: true }]
+    "func-call-spacing": ["error", "always", { allowNewlines: true }],
+    "react/display-name": ["off"]
   },
   settings: {
       react: {
