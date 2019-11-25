@@ -16,7 +16,7 @@ const writeFile = path => data => node (done => fs.writeFile (path, data, done))
 const parseJson = encase (JSON.parse)
 
 /** liftA2 :: Applicative f => (a -> b -> c) -> f a -> f b -> f c */
-const liftA2 = (fn) => (fa) => (fb) => ap (fb) (map (fn) (fa))
+const liftA2 = fn => fa => fb => ap (fb) (map (fn) (fa))
 
 module.exports = {
   readFile,
