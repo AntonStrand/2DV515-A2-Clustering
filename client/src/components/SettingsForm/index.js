@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Button, Form } from 'semantic-ui-react'
 import {
   NumberInput,
@@ -11,14 +12,14 @@ import {
 /** isValidState :: State -> Boolean */
 const isValidState = state =>
   state.algorithm != null &&
-  isValidNumberInput(state.clusters) &&
-  isValidNumberInput(state.iterations)
+  isValidNumberInput (state.clusters) &&
+  isValidNumberInput (state.iterations)
 
 /** forkState :: State -> Object */
 const forkState = state => ({
   algorithm: state.algorithm,
-  clusters: getNumber(state.clusters),
-  iterations: getNumber(state.iterations)
+  clusters: getNumber (state.clusters),
+  iterations: getNumber (state.iterations)
 })
 
 const options = [
@@ -28,17 +29,17 @@ const options = [
 
 /** SettingsForm :: (FormData -> Any) -> JSX */
 const SettingsForm = ({ onSubmit }) => {
-  const [state, setState] = useState({
+  const [state, setState] = useState ({
     clusters: NumberInput.Default,
     iterations: NumberInput.Default
   })
 
   // select :: FormObject -> State ()
-  const select = (_, { value }) => setState({ ...state, algorithm: value })
+  const select = (_, { value }) => setState ({ ...state, algorithm: value })
 
   // setNumberInput :: String -> FormObject -> State ()
   const setNumberInput = key => (_, { value }) =>
-    setState({ ...state, [key]: toNumberInput(value) })
+    setState ({ ...state, [key]: toNumberInput (value) })
 
   return (
     <Form>
@@ -54,28 +55,32 @@ const SettingsForm = ({ onSubmit }) => {
           fluid
           label='Number of clusters'
           placeholder='Number of clusters'
-          onChange={setNumberInput('clusters')}
-          error={showError(state.clusters)}
+          onChange={setNumberInput ('clusters')}
+          error={showError (state.clusters)}
         />
         <Form.Input
           fluid
           label='Max number of iterations'
           placeholder='Max number of iterations'
-          onChange={setNumberInput('iterations')}
-          error={showError(state.iterations)}
+          onChange={setNumberInput ('iterations')}
+          error={showError (state.iterations)}
         />
       </Form.Group>
       <Button
         type='submit'
-        disabled={!isValidState(state)}
+        disabled={!isValidState (state)}
         onClick={() => {
-          if (isValidState(state)) onSubmit(forkState(state))
+          if (isValidState (state)) onSubmit (forkState (state))
         }}
       >
         Submit
       </Button>
     </Form>
   )
+}
+
+SettingsForm.propTypes = {
+  onSubmit: PropTypes.func
 }
 
 export default SettingsForm
