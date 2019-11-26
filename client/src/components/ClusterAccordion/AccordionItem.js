@@ -2,7 +2,7 @@ import React from 'react'
 import { Accordion, Icon } from 'semantic-ui-react'
 
 const AccordionItem = (activeIndex, setActive) => (cluster, i) => (
-  <>
+  <React.Fragment key={i}>
     <Accordion.Title
       active={activeIndex === i}
       index={i}
@@ -14,7 +14,7 @@ const AccordionItem = (activeIndex, setActive) => (cluster, i) => (
     <Accordion.Content active={activeIndex === i}>
       {cluster.map (({ title }, i) => <p key={i}>{title}</p>)}
     </Accordion.Content>
-  </>
+  </React.Fragment>
 )
 
 export default AccordionItem
