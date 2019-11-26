@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import Form from './components/SettingsForm/'
 import ClusterAccordion from './components/ClusterAccordion'
+import Tree from './components/Tree'
 import { getHierarchical, getKMean } from './api'
 import { fork } from 'fluture'
 import Type from 'union-type'
@@ -18,7 +19,7 @@ const State = Type ({
 })
 
 const getCurrentView = State.case ({
-  Hierarchical: cluster => JSON.stringify (cluster, null, 2),
+  Hierarchical: cluster => <Tree cluster={cluster} />,
   Kmean: cs => <ClusterAccordion clusters={cs} />,
   Error: () => <h3>Something went wrong...</h3>,
   Loading: () => (
