@@ -60,7 +60,7 @@ function App () {
         <Form onSubmit={requestClusters} />
         <br />
         { getCurrentView (state) }
-        <p style={{ marginTop: '1em' }}>Created by <a href='https://github.com/antonstrand'>Anton Strand</a></p>
+        <p style={{ margin: '1em 0 2em' }}>Created by <a href='https://github.com/antonstrand'>Anton Strand</a></p>
       </div>
     </>
   )
