@@ -45,7 +45,6 @@ function App () {
 
   /** requestClusters :: FormData -> State () */
   const requestClusters = pipe (
-    x => console.log (x) || x,
     startLoading,
     FormData.case ({
       Hierarchical: () => forkNextState (State.Hierarchical) (getHierarchical ()),
