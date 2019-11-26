@@ -7,6 +7,9 @@ const fGet = encaseP (axios.get)
 /** get :: String -> Future Error a */
 const get = path => map (result => result.data) (fGet (`${API_BASE_URL}${path}`))
 
-/** getClusters :: FormData -> Future Error [Clusters] */
-export const getClusters = ({ algorithm, clusters, iterations }) =>
-  get (`/${algorithm}?clusters=${clusters}&iterations=${iterations}`)
+/** getHierarchical :: () -> Future Cluster */
+export const getHierarchical = () => get ('/hierarchical')
+
+/** getKMean :: Query -> Future Error [Centroid] */
+export const getKMean = ({ clusters, iterations }) => console.log ('get K-mean') ||
+  get (`/k-mean?clusters=${clusters}&iterations=${iterations}`)

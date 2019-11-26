@@ -2,13 +2,15 @@ import React, { useState } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import Form from './components/SettingsForm/'
 import ClusterAccordion from './components/ClusterAccordion'
-import { getClusters } from './api'
+import { getHierarchical, getKMean } from './api'
 import { fork } from 'fluture'
 import Type from 'union-type'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { pipe } from 'ramda'
+import { FormData } from './types/FormData'
 
 const State = Type ({
+  Hierarchical: [Object],
   Kmean: [Array],
   Error: [String],
   Loading: [],
@@ -16,6 +18,7 @@ const State = Type ({
 })
 
 const getCurrentView = State.case ({
+  Hierarchical: cluster => JSON.stringify (cluster, null, 2),
   Kmean: cs => <ClusterAccordion clusters={cs} />,
   Error: () => <h3>Something went wrong...</h3>,
   Loading: () => (
@@ -38,11 +41,17 @@ function App () {
     setState
   )
 
+  const forkNextState = stateName => fork (setNextState (State.Error)) (setNextState (stateName))
+
   /** requestClusters :: FormData -> State () */
   const requestClusters = pipe (
+    x => console.log (x) || x,
     startLoading,
-    getClusters,
-    fork (setNextState (State.Error)) (setNextState (State.Kmean))
+    FormData.case ({
+      Hierarchical: () => forkNextState (State.Hierarchical) (getHierarchical ()),
+      KMean: query => forkNextState (State.Kmean) (getKMean (query))
+    })
+
   )
 
   return (
