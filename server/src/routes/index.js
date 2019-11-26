@@ -1,8 +1,10 @@
 const { routes, methods, json } = require ('paperplane')
 const kMean = require ('./k-mean')
+const hierarchical = require ('./hierarchical')
 
 const endpoints = {
-  ...kMean
+  ...kMean,
+  ...hierarchical
 }
 
 module.exports = routes ({
