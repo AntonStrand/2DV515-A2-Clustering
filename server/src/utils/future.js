@@ -1,4 +1,4 @@
-const { node, resolve, reject, encase, ap, map } = require ('fluture')
+const { node, resolve, reject, encase, ap, map, chain } = require ('fluture')
 const fs = require ('fs')
 const { isNil } = require ('ramda')
 const { ifElse } = require ('./logic')
@@ -18,10 +18,14 @@ const parseJson = encase (JSON.parse)
 /** liftA2 :: Applicative f => (a -> b -> c) -> f a -> f b -> f c */
 const liftA2 = fn => fa => fb => ap (fb) (map (fn) (fa))
 
+/** liftC2 :: Chaim, Applicative m => (a -> b -> m c) -> m a -> m b -> m c */
+const liftC2 = fn => fa => fb => chain (x => x) (ap (fb) (map (fn) (fa)))
+
 module.exports = {
   readFile,
   writeFile,
   fromNullable,
   parseJson,
-  liftA2
+  liftA2,
+  liftC2
 }
