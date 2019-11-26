@@ -1,8 +1,7 @@
 
 function Cluster (params) {
   this.left = params.left
-  this.right = params.left
-  this.parent = params.parent
+  this.right = params.right
   this.blog = params.blog
   this.distance = params.distance
 }
