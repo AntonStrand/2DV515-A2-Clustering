@@ -13,19 +13,26 @@ let cache = null
 const setCache = x => (cache = x) || x
 
 /** cleanClusterTree :: Cluster -> ResponseTree */
-const cleanClusterTree = cluster => {
-  if (cluster.left != null) cleanClusterTree (cluster.left)
-  if (cluster.right != null) cleanClusterTree (cluster.right)
-  cluster.blog = cluster.blog.title
-  cluster.distance = undefined
-  return cluster
+const flattenClusterTree = cluster => {
+  let left, right
+  if (cluster.left != null) left = flattenClusterTree (cluster.left)
+  if (cluster.right != null) right = flattenClusterTree (cluster.right)
+  
+  if (left) {
+    cluster.children = cluster.children ? [ ...cluster.children, left ] : [ left ]
+  }
+  if (right) {
+    cluster.children = cluster.children ? [ ...cluster.children, right ] : [ right ]
+  }
+  
+  return { title: cluster.blog.title, children: cluster.children }
 }
 
 /** getHierarchical :: () -> Promise Error Response */
 const getHierarchical = pipe (
   getBlogs,
   liftC2 (hierarchical) (getWordCount ()),
-  map (cleanClusterTree),
+  map (flattenClusterTree),
   map (json),
   promise,
   setCache
