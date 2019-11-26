@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const toJSX = cluster =>
   cluster.children
@@ -7,6 +8,10 @@ const toJSX = cluster =>
 
 const Tree = ({ cluster }) => {
   return <div>{toJSX (cluster)}</div>
+}
+
+Tree.propTypes = {
+  cluster: PropTypes.object
 }
 
 export default Tree
