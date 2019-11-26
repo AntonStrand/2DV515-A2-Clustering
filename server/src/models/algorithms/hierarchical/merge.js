@@ -8,15 +8,12 @@ const averageBlog = aB => bB =>
   }, { wordCount: [] })
 
 /** merge :: Cluster -> Cluster -> Number -> Cluster */
-const merge = A => B => distance => {
-  const P = Cluster.of ({ left: A, right: B, distance })
-
-  A.parent = P
-  B.parent = P
-
-  P.blog = averageBlog (A.blog) (B.blog)
-
-  return P
-}
+const merge = A => B => distance => 
+  Cluster.of ({
+    left: A,
+    right: B,
+    distance,
+    blog: averageBlog (A.blog) (B.blog)
+  })
 
 module.exports = merge
