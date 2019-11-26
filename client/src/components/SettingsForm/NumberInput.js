@@ -23,7 +23,10 @@ const isValidNumberInput = NumberInput.case ({
 })
 
 /** getNumber :: InputNumber -> Number */
-const getNumber = NumberInput.case ({ Valid: n => n })
+const getNumber = NumberInput.case ({
+  Valid: n => n,
+  _: () => { throw new Error ('Check if input number is valid first.') }
+})
 
 /** showError :: InputNumber -> String | Boolean */
 const showError = NumberInput.case ({
