@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import Form from './components/SettingsForm/'
 import ClusterAccordion from './components/ClusterAccordion'
+import LoadingScreen from './components/LoadingScreen'
 import Tree from './components/Tree'
 import { getHierarchical, getKMean } from './api'
 import { fork } from 'fluture'
 import Type from 'union-type'
-import { Dimmer, Loader } from 'semantic-ui-react'
 import { pipe } from 'ramda'
 import { FormData } from './types/FormData'
 
@@ -16,18 +16,6 @@ const State = Type ({
   Error: [String],
   Loading: [],
   Nothing: []
-})
-
-const getCurrentView = State.case ({
-  Hierarchical: cluster => <Tree cluster={cluster} />,
-  Kmean: cs => <ClusterAccordion clusters={cs} />,
-  Error: () => <h3>Something went wrong...</h3>,
-  Loading: () => (
-    <Dimmer active inverted>
-      <Loader inverted>Loading</Loader>
-    </Dimmer>
-  ),
-  _: () => ''
 })
 
 function App () {
@@ -60,7 +48,13 @@ function App () {
         <h1>A2 - Clustering</h1>
         <Form onSubmit={requestClusters} />
         <br />
-        { getCurrentView (state) }
+        { state.case ({
+          Hierarchical: cluster => <Tree cluster={cluster} />,
+          Kmean: cs => <ClusterAccordion clusters={cs} />,
+          Error: () => <h3>Something went wrong...</h3>,
+          Loading: () => <LoadingScreen />,
+          Nothing: () => ''
+        }) }
         <p style={{ margin: '1em 0 2em' }}>Created by <a href='https://github.com/antonstrand'>Anton Strand</a></p>
       </div>
     </>
