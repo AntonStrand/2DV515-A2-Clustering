@@ -24,7 +24,7 @@ My solution for assignment 2 in Web Intelligence (2DV515) at Linnaeus University
 
 - [x] Implement Hierarchical Clustering with Pearson similarity
 - [x] Run the algorithm on the blog data dataset
-- [ ] Present the result as an interactive tree in the client GUI (it shall be possible to expand/collapse branches)
+- [x] Present the result as an interactive tree in the client GUI (it shall be possible to expand/collapse branches)
 
 ## Scripts
 
