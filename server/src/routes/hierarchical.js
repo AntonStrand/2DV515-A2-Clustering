@@ -6,10 +6,11 @@ const { liftC2 } = require ('../utils')
 
 const hierarchical = require ('../models/algorithms/hierarchical')
 
-// Will be set to Future JSON Response after first request
+// Will be set to Promise JSON Response after first request
 let cache = null
 
-const setCache = future => (cache = future) || future
+/** setCache :: a -> a */
+const setCache = x => (cache = x) || x
 
 /** cleanClusterTree :: Cluster -> ResponseTree */
 const cleanClusterTree = cluster => {
@@ -26,16 +27,13 @@ const getHierarchical = pipe (
   liftC2 (hierarchical) (getWordCount ()),
   map (cleanClusterTree),
   map (json),
-  setCache,
-  promise
+  promise,
+  setCache
 )
 
 /** hierarchical :: Request -> Promise Error Response */
 module.exports = {
   '/hierarchical': methods ({
-    GET: () => 
-      cache
-        ? promise (cache)
-        : getHierarchical ()
+    GET: () => cache || getHierarchical ()
   })
 }
