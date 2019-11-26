@@ -8,34 +8,49 @@ import {
   getNumber,
   showError
 } from './NumberInput'
+import Type from 'union-type'
+import { FormData, KMeanData } from '../../types/FormData'
+
+const Algorithm = Type ({
+  KMean: [],
+  Hierarchical: [],
+  None: []
+})
 
 /** isValidState :: State -> Boolean */
 const isValidState = state =>
-  state.algorithm != null &&
-  isValidNumberInput (state.clusters) &&
-  isValidNumberInput (state.iterations)
+  state.algorithm.case ({
+    Hierarchical: () => true,
+    KMean: () => isValidNumberInput (state.clusters) && isValidNumberInput (state.iterations),
+    _: () => false
+  })
 
-/** forkState :: State -> Object */
-const forkState = state => ({
-  algorithm: state.algorithm,
-  clusters: getNumber (state.clusters),
-  iterations: getNumber (state.iterations)
-})
+/** toFormData :: State -> FormData */
+const toFormData = state =>
+  state.algorithm.case ({
+    Hierarchical: () => FormData.Hierarchical,
+    KMean: () => FormData.KMean (KMeanData.of (getNumber (state.clusters), getNumber (state.iterations))),
+    _: () => 'This should not be possible'
+  })
 
 const options = [
-  { key: 'k', text: 'K-mean', value: 'k-mean' },
-  { key: 'h', text: 'Hierarchical Clustering', value: 'hierarchical' }
+  { key: 'k', text: 'K-mean', value: 'Algorithm.KMean' },
+  { key: 'h', text: 'Hierarchical Clustering', value: 'Algorithm.Hierarchical' }
 ]
 
 /** SettingsForm :: (FormData -> Any) -> JSX */
 const SettingsForm = ({ onSubmit }) => {
   const [state, setState] = useState ({
+    algorithm: Algorithm.None,
     clusters: NumberInput.Default,
     iterations: NumberInput.Default
   })
 
   // select :: FormObject -> State ()
-  const select = (_, { value }) => setState ({ ...state, algorithm: value })
+  const select = (_, { value }) => {
+    value = value === 'Algorithm.KMean' ? Algorithm.KMean : Algorithm.Hierarchical
+    setState ({ ...state, algorithm: value })
+  }
 
   // setNumberInput :: String -> FormObject -> State ()
   const setNumberInput = key => (_, { value }) =>
@@ -70,7 +85,7 @@ const SettingsForm = ({ onSubmit }) => {
         type='button'
         disabled={!isValidState (state)}
         onClick={() => {
-          if (isValidState (state)) onSubmit (forkState (state))
+          if (isValidState (state)) onSubmit (toFormData (state))
         }}
       >
         Submit
